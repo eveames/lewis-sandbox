@@ -29,7 +29,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "off",
+      "vue/valid-v-for": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
