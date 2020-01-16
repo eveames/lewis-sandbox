@@ -43,7 +43,7 @@ export default {
   data: function() {
     return {
       entry: '',
-      index: 0,
+      index: 1,
       formulaEntry: '',
       userEnteredFormula: 0,
       newFormula: ''

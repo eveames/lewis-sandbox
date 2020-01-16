@@ -17,7 +17,7 @@ export default {
       console.log("formula is " + formula)
       let matchArray = [...formula.matchAll(atomFinder)];
       //for now, use org unless first atom in formula can expand octet
-      console.log("matchArray is " + matchArray)
+      //console.log("matchArray is " + matchArray)
       //console.log(elements[matchArray[0][1]])
       if (elements[matchArray[0][1]][3] > 8) {centralNotOrg = 1}
       let chargeArray = chargeFinder.exec(formula)
@@ -50,22 +50,52 @@ export default {
           let temp = noParenRegex.exec(section)
           group = temp[0]
           console.log(group.length)
-          //console.log("group is " + group)
+          console.log("group is " + group)
           endIndex = noParenRegex.lastIndex + group.length - 1
         }
-        return [group, groupMultiples, startIndex, endIndex]
+        return [group, groupMultiples, startIndex , endIndex + startIndex + 1]
       }
 
       //find number of centers in group, and build this section of structure array
       //recursive
-      //function parseGroup(group, formula, startIndex, structure) {}
+      //returns complete structure array
+      function parseGroup(groupArray, formula, structure, elements) {
+        //find number of centers in group
+        let centerFinder = /(C|Si|Se|S|N|P|O)(\d*)/g
+        let perifFinder = /([A-Z][a-z]*)(\d*)/g
+        let currentCenter = centerFinder.exec(groupArray[0])
+        let curCentralElement = elements[currentCenter[1]]
+        let numCenters = 1
+        let perifElementsArray = [...groupArray[0].slice(groupArray[3]).matchAll(perifFinder)]
+        let perifAtomsArray = []
+        perifElementsArray.forEach(item => {
+          perifAtomsArray.push(_.fill(Array(item[2], item[1])))
+        })
+        
+        if (currentCenter[2]) {
+          numCenters = currentCenter[2]
+          if (perifElementsArray.length > 1) {
+            console.log("bad formula: multicenter groups should have only one type of peripheral element")
+          }
+        }
+        console.log(currentCenter)
+        for (let i = 0; i < numCenters; i++){
+          structure.push([structure.length, curCentralElement[1] - curCentralElement[4], currentCenter[1], [], 0, curCentralElement[4], 0, 0, 0])
+
+        }
+        return structure
+      }
 
       if (!centralNotOrg) {
         //ID center of first group
         // use recursion
         //let centerFinder = /(C|Si|Se|S|N|P|O(\d*))[A-Z]/g
         //let center = centerFinder.exec(formula)[1]
-        console.log(findGroup(formula, 0))
+        let firstGroup = findGroup(formula, 0)
+        console.log(firstGroup)
+        structure = parseGroup(firstGroup, formula, structure, elements)
+        console.log(structure)
+        
 
       }
 
