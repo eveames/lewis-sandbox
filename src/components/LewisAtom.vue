@@ -96,43 +96,71 @@ export default {
       for (let i =0; i < this.directions.length; i++) {
         numBondsAlready += this.directions[i];
       }
-      if (numBondsAlready > 1) console.log('not setup for cylic molecules')
+      //if (numBondsAlready > 1) console.log('not setup for cylic molecules')
       return numBondsAlready;
     },
     toDraw: function() {
-      let x = _.random(0,11)
       let posOccupied = []
-      if (this.numBondsAlready === 1) {
-        x = this.directions.indexOf(1)
-        posOccupied.push(x)
-      }
       let domains = this.numDomains;
       let posToAdd = []
       let bondsArray = []
       let newAtomsArray = []
       let dotsArray = []
       let formalChargeToDraw = false;
-      //if (this.formalCharge !== 0 && domains > 4) domains += 1
-      if (domains === 7) posToAdd = [(x+6)%12, (x+2)%12, (x+4)%12, (x+8)%12, (x+10)%12, (x+5)%12, x]
-      else if (domains === 6) posToAdd = [(x+6)%12, (x+2)%12, (x+4)%12, (x+8)%12, (x+10)%12,x]
-      else if (domains === 5) posToAdd = [(x+5)%12,(x+2)%12, (x+7)%12, (x+10)%12, x]
-      else if (domains === 4) posToAdd = [(x+6)%12,(x+3)%12, (x+9)%12, x]
-      else if (domains === 3) posToAdd = [(x+4)%12, (x+8)%12, x]
-      else if (domains === 2) posToAdd = [(x+6)%12, x]
-      else if (domains === 1) posToAdd = [x]
-      else console.log("bad number of domains")
+      if (this.stats.org) {
+        if (this.numBondsAlready > 0) {
+          for (let i =0; i < this.directions.length; i++) {
+            if (this.directions[i] == 1) {
+              posOccupied.push(i)
+            }
+          } 
+        }
+        //console.log("posOccupied is ", posOccupied)
+        if (domains == 4) {
+          posToAdd = [3,9,0,6]
+        }
+        else if (domains == 3) {
+          posToAdd = [2,10,6]
+        }
+        else if (domains == 2) {
+          posToAdd = [0,6]
+        }
+        else if (domains == 1) {
+          console.log("domains = 1, seems like something weird happened")
+        }
+        
+        if (posOccupied.length > 0) {
+          posToAdd = _.difference(posToAdd, posOccupied)
+        }
+      }
+      else {
+        let x = _.random(0,11)
+        if (this.numBondsAlready === 1) {
+         x = this.directions.indexOf(1)
+          posOccupied.push(x)
+        }
+        //if (this.formalCharge !== 0 && domains > 4) domains += 1
+        if (domains === 7) posToAdd = [(x+6)%12, (x+2)%12, (x+4)%12, (x+8)%12, (x+10)%12, (x+5)%12, x]
+        else if (domains === 6) posToAdd = [(x+6)%12, (x+2)%12, (x+4)%12, (x+8)%12, (x+10)%12,x]
+        else if (domains === 5) posToAdd = [(x+5)%12,(x+2)%12, (x+7)%12, (x+10)%12, x]
+        else if (domains === 4) posToAdd = [(x+6)%12,(x+3)%12, (x+9)%12, x]
+        else if (domains === 3) posToAdd = [(x+4)%12, (x+8)%12, x]
+        else if (domains === 2) posToAdd = [(x+6)%12, x]
+        else if (domains === 1) posToAdd = [x]
+        else console.log("bad number of domains")
+      }
+      
       //add bond and atoms
-      //let bondsToDraw = this.numConnections - this.numBondsAlready
       //draw lines at angles defined by posToAdd
       let connections = this.atom[3]
       connections.forEach(item => {
+        //item is [index,bond order] from structure[index][3]
         if (this.drawnAtoms[item[0]] === 0) {
           let direction = posToAdd.shift();
           posOccupied.push(direction)
           if (item[1] === 1) {
             let ends = Vue.bondPositioner(this.textRect, direction);
             bondsArray.push({start: ends[0], end: ends[1]})
-
           }
           //need to fix these
           if (item[1] === 2) {
@@ -145,7 +173,6 @@ export default {
             bondsArray.push({start: ends[0], end: ends[1]})
             bondsArray.push({start: ends[2], end: ends[3]})
             bondsArray.push({start: ends[4], end: ends[5]})
-
           }
           //add atoms
           let directions = Array(12);
@@ -159,6 +186,7 @@ export default {
             atomsArray: this.stats.atomsArray,
             drawnAtoms: this.drawnAtoms,
             index: item[0]
+            //org: true
           }})
         }
       })

@@ -30,76 +30,6 @@ export default {
       }
       console.log("centralNotOrg is " + centralNotOrg)
 
-      //just finds next group (either contents of () or until next chain-able atom)
-      function findGroup(formula, startIndex) {
-        //split formula to start looking at startIndex
-        let section = formula.slice(startIndex)
-        let group = ""
-        let groupMultiples = 1
-        let endIndex = 0
-        if (section.charAt(0) == "(") {
-          let parenRegex = /\((\w+)\)(\d*)/
-          let temp = parenRegex.exec(section)
-          console.log(temp)
-          group = temp[0]
-          groupMultiples = temp[1]
-          endIndex = parenRegex.lastIndex
-        }
-        else {
-          let noParenRegex = /.+?(?=C|Si|Se|S|N|P|O|\(|$)/
-          let temp = noParenRegex.exec(section)
-          group = temp[0]
-          console.log(group.length)
-          console.log("group is " + group)
-          endIndex = noParenRegex.lastIndex + group.length - 1
-        }
-        return [group, groupMultiples, startIndex , endIndex + startIndex + 1]
-      }
-
-      //find number of centers in group, and build this section of structure array
-      //recursive
-      //returns complete structure array
-      function parseGroup(groupArray, formula, structure, elements) {
-        //find number of centers in group
-        let centerFinder = /(C|Si|Se|S|N|P|O)(\d*)/g
-        let perifFinder = /([A-Z][a-z]*)(\d*)/g
-        let currentCenter = centerFinder.exec(groupArray[0])
-        let curCentralElement = elements[currentCenter[1]]
-        let numCenters = 1
-        let perifElementsArray = [...groupArray[0].slice(groupArray[3]).matchAll(perifFinder)]
-        let perifAtomsArray = []
-        perifElementsArray.forEach(item => {
-          perifAtomsArray.push(_.fill(Array(item[2], item[1])))
-        })
-        
-        if (currentCenter[2]) {
-          numCenters = currentCenter[2]
-          if (perifElementsArray.length > 1) {
-            console.log("bad formula: multicenter groups should have only one type of peripheral element")
-          }
-        }
-        console.log(currentCenter)
-        for (let i = 0; i < numCenters; i++){
-          structure.push([structure.length, curCentralElement[1] - curCentralElement[4], currentCenter[1], [], 0, curCentralElement[4], 0, 0, 0])
-
-        }
-        return structure
-      }
-
-      if (!centralNotOrg) {
-        //ID center of first group
-        // use recursion
-        //let centerFinder = /(C|Si|Se|S|N|P|O(\d*))[A-Z]/g
-        //let center = centerFinder.exec(formula)[1]
-        let firstGroup = findGroup(formula, 0)
-        console.log(firstGroup)
-        structure = parseGroup(firstGroup, formula, structure, elements)
-        console.log(structure)
-        
-
-      }
-
-      if (centralNotOrg) {
       while((tempArray = atomFinder.exec(formula)) !== null) {
         //console.log("tempArray is " + tempArray)
         //console.log("formula is " + formula)
@@ -126,9 +56,10 @@ export default {
       console.log('in parse structure is ', structure)
       numE -= charge
       if (numE%2 === 0) octetTotalMin += extraEToAdd
-    }
       return {structure: structure, charge: charge, numE: numE, octetTotalMax: octetTotalMax, octetTotalMin: octetTotalMin};
     }
+  
+    
     //expects central atom first; diatomics ok; chains and rings not ok
     Vue.generalLewisStructure = function(formula, elements, maxBonds, alterationInstructions, maxErrors) {
       function checkConnection(struc, a, b) {
@@ -551,7 +482,7 @@ export default {
   if (_.reduce(errors, (sum, n) => sum + n, 0) > 0) {
     return {structure: struc, answer: 'n', errors: errors}
   }
-  else return {structure: struc, answer: 'y', errors: false};
+  else return {structure: struc, answer: 'y', errors: false, org: false};
 }
 }
-}
+  }

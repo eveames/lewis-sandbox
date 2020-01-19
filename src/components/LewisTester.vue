@@ -14,7 +14,7 @@
                 <input type="text" autocorrect="off" v-model="formulaEntry">
               </span>
             </div>
-            <svg width="200" height="200">
+            <svg width="800" height="800">
               <LewisAtom :bboxes="bboxes" :stats='stats'/>
             </svg>
             matchAll array is {{matchAll}}
@@ -43,7 +43,7 @@ export default {
   data: function() {
     return {
       entry: '',
-      index: 1,
+      index: 26,
       formulaEntry: '',
       userEnteredFormula: 0,
       newFormula: ''
@@ -63,7 +63,7 @@ export default {
       //return 'SCl4'
     },
     question: function() {
-      return Vue.parseFormulaForStructure(this.formula, LewisElements)
+      return Vue.parseFormulaForOrg(this.formula, LewisElements)
     },
     stats: function() {
       let directions = Array(12);
@@ -71,11 +71,12 @@ export default {
       let drawnAtoms = Array(this.question.structure.length);
       drawnAtoms.fill(0);
       return {
-        center: [100,100],
+        center: [200,200],
         directions: directions,
         atomsArray: this.question.structure,
         drawnAtoms: drawnAtoms,
         index: 0,
+        org: this.question.org
       }
     },
     matchAll: function() {

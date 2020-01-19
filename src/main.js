@@ -5,8 +5,10 @@ window.Vue = Vue;
 
 import LewisPositionerPlugin from './LewisPositionerPlugin.js';
 import LewisStructurePlugin from './LewisStructurePlugin.js';
+import LewisOrgPlugin from './LewisOrgPlugin.js';
 Vue.use(LewisPositionerPlugin);
 Vue.use(LewisStructurePlugin);
+Vue.use(LewisOrgPlugin);
 
 Vue.config.productionTip = false
 
@@ -15,7 +17,7 @@ Vue.filter('formatFormula', function(value) {
   let escapeRE = /\/|&|<|>|'|"/;
   if (escapeRE.test(str)) return "Please enter a correctly formatted formula (see example)";
   else {
-    str = str.replace(/([\w)\]])(\d)/g, '$1<sub>$2</sub>');
+    str = str.replace(/([\w)\]])(\d+)/g, '$1<sub>$2</sub>');
     str = str.replace(/([+])(\d+)/, '<sup>$2$1</sup>');
     str = str.replace(/([-])(\d+)/, '<sup>$2&minus;</sup>');
     str = str.replace(/(<sup>)(1)([+&])/, '$1$3');

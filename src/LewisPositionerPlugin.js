@@ -1,9 +1,6 @@
 //import _ from "lodash";
 export default {
   install: function (Vue) {
-
-    //produces a string of given length; increasing zeros increases probability
-    //that any given digit in string is zero
     Vue.bondPositioner = function(textRect, direction) {
       let bondLength = 20
       let start = [0,0]

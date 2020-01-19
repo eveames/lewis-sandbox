@@ -20,5 +20,18 @@ if not, build new approach to parsing structure into connections array\
 then adapt algorithm to draw this\
 hold off on including rings for now\
 \
-working on parseGroup, about line 84\
-test if perifAtomsArray worked, then fill from there in loop around line 84}
+working on parseGroup, need to debug finding additional groups after the first\
+probably need to hard-code acid group recognition\
+fix aldehydes, acids, acyl halides\
+in (COOH) group, will try to add H to C first; fix this\
+fix branched structures like CH3CH(COOH)CH3\
+add rule that groups in () don't connect to other groups in ()?\
+\
+**specify horizontal orientation of drawing for org structures: still some curving, but will hold off on fixing for now\
+**make sure drawing stays inside svg area: later, perhaps trim area after drawing complete?\
+** how to prevent overlap in crowded drawings like t-Bu?\
+**bad angles: (C2H3)2O, ethers: where num domains changes, or lone pairs present, must use relative angles\
+\
+\
+What system expects:\
+multicenter groups are linear and have only one connection to other groups}
