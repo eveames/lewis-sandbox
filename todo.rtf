@@ -20,17 +20,31 @@ if not, build new approach to parsing structure into connections array\
 then adapt algorithm to draw this\
 hold off on including rings for now\
 \
-working on parseGroup, need to debug finding additional groups after the first\
 probably need to hard-code acid group recognition\
 fix aldehydes, acids, acyl halides\
 in (COOH) group, will try to add H to C first; fix this\
 fix branched structures like CH3CH(COOH)CH3\
 add rule that groups in () don't connect to other groups in ()?\
+to test ring structures: (CH2)(CH2)(CH2), etc\
+fix so H2CCH2 works; make sure atom 0 is always a center (backbone atom not perif)\
 \
 **specify horizontal orientation of drawing for org structures: still some curving, but will hold off on fixing for now\
 **make sure drawing stays inside svg area: later, perhaps trim area after drawing complete?\
 ** how to prevent overlap in crowded drawings like t-Bu?\
 **bad angles: (C2H3)2O, ethers: where num domains changes, or lone pairs present, must use relative angles\
+** when designing new approach to drawing angles, should plan for ring structures\
+\
+Thoughts on improved drawing algorithm:\
+-first sort out backbone structure angles (including rings, etc)\
+-may consider lp separate from atom domains?\
+-write function to check for overlap and avoid?\
+-maybe use two different components, one for backbone atoms, one for perif atoms?\
+-not currently using "isLoop" parameter in structure; should I?\
+\
+Working on drawing rings and spreading out atoms deliberately:\
+-figure out how to pass center locations with props \
+-possibly change how placedAtoms works (doesn't seem well-designed, probably replace with a list of idices and centers?)\
+-actually set up algorithm for placing atoms (currently started in placedAtoms in LewisAtomUpdate component\
 \
 \
 What system expects:\

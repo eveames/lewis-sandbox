@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <LewisTester v-bind:bboxes = "bboxes"/>
+    <button @click="setApp(1)" class="btn btn-default"
+              type="button">Lewis Structures!</button>
+    <button @click="setApp(2)" class="btn btn-default"
+              type="button">Lab Sort!</button>
+    <LewisTester v-if="whichApp === 1" v-bind:bboxes = "bboxes"/>
+    <LabSort v-if="whichApp === 2" />
     <svg class="Lewis-Box-Sizes" width="20" height="20">
     <text v-for="element in elements" :key="key" :id="'atomForBox' + element[0]" :x="0" :y="0" font-family="Verdana"
       font-size="24">{{element[0]}}</text>
@@ -15,16 +20,20 @@ import LewisTester from './components/LewisTester.vue'
 import _ from 'lodash'
 import {LewisElements} from './LewisData.js'
 
+import LabSort from './components/LabSort.vue'
+
 
 export default {
   name: 'app',
   components: {
-    LewisTester
+    LewisTester,
+    LabSort
   },
   data: function() {
     return {
       bboxes: [1],
-      elements: LewisElements
+      elements: LewisElements,
+      whichApp: 1
     }
   },
   mounted () {
@@ -44,6 +53,11 @@ export default {
       console.log("done mounting App, boxArray is ", boxArray)
       this.bboxes = boxArray
       console.log(this.bboxes)
+  },
+  methods: {
+    setApp: function(choice) {
+      this.whichApp = choice
+    }
   }
 }
 </script>

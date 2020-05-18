@@ -33,11 +33,13 @@
 import {LewisHomo, LewisHetero, LewisMulti, LewisTriCentral, LewisIons, LewisElements} from '../LewisData.js'
 import Vue from 'vue'
 import LewisAtom from './LewisAtom.vue'
+//import LewisAtomUpdate from './LewisAtomUpdate.vue'
 
 
 export default {
   components: { 
-    LewisAtom
+    LewisAtom,
+    //LewisAtomUpdate
   },
   props: ['bboxes'],
   data: function() {
@@ -69,12 +71,15 @@ export default {
       let directions = Array(12);
       directions.fill(0);
       let drawnAtoms = Array(this.question.structure.length);
+      let placedAtoms = Array(this.question.structure.length);
       drawnAtoms.fill(0);
+      placedAtoms.fill(0)
       return {
         center: [200,200],
         directions: directions,
         atomsArray: this.question.structure,
         drawnAtoms: drawnAtoms,
+        placedAtoms: placedAtoms,
         index: 0,
         org: this.question.org
       }
