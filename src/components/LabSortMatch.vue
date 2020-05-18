@@ -34,8 +34,8 @@
 <script>
 
 import _ from 'lodash'
-import LabSortCompounds from '../LabSortData.js'
-import LabSortSequence from '../LabSortSequence.js'
+import {LabSortCompounds} from '../LabSortData.js'
+import {LabSortSequence} from '../LabSortSequence.js'
 import Vue from 'vue'
 
 
@@ -50,7 +50,7 @@ export default {
       ],
   data: function() {
     return {
-      entry: '',
+      //entry: '',
       readyToSubmit: false,
       question: {
         headers: ["Cd", "Ca", "C"],
@@ -70,13 +70,24 @@ export default {
             ["btn-primary", "btn-primary","btn-primary"]],
     }
   },
-  //props: ['questionTypeID'],
-  computed: {
-    questionB: function() {
-        console.log(LabSortCompounds.He)
-      console.log(LabSortSequence[0][0])
+  watch: {
+    index: function() {
+      this.setQuestion()
+      //this.updateBtnClasses()
+    }
+  },
+  mounted: function() {
+    this.setQuestion()
+  },
+  /*beforeUpdate: function() {
+      this.updateBtnClasses(this.question.btnInit)  
+  },*/
+  methods: {
+    setQuestion: function() {
+        console.log("recomputing question")
+      //console.log(LabSortSequence[0][0])
       let seqItem = LabSortSequence[this.level][this.index]
-      console.log(seqItem)
+      //console.log(seqItem)
       // headers: items to match to (top)
       // matchers: items on buttons
 
@@ -98,27 +109,21 @@ export default {
           matchers.push(data[seqItem[3]])
         } 
       }
-      _.shuffle(matchers)
+      //console.log("before shuffle", matchers)
+      matchers = _.shuffle(matchers)
+      //console.log("after shuffle", matchers)
       let choices = Array(headers.length).fill("")
       let usedMatchers = Array(matchers.length).fill(-1)
       let btnInit = Array(matchers.length).fill(Array(headers.length).fill("btn-primary"))
-      return {
+      this.btnClasses = this.updateBtnClasses(btnInit, usedMatchers)
+      this.question = {
           headers: headers,
           matchers: matchers,
           choices: choices,
           usedMatchers: usedMatchers,
           btnInit: btnInit
       }
-    }
-    
-
-  },
-  created: function() {
-    this.updateBtnClasses()
-    
-  },
-  methods: {
-
+    },
     makeChoice: function(m, h) {
         m -= 1
         h -= 1
@@ -133,7 +138,7 @@ export default {
         }
         Vue.set(this.question.choices, h, this.question.matchers[m])
         this.question.usedMatchers[m] = h
-        this.btnClasses = this.updateBtnClasses()
+        this.btnClasses = this.updateBtnClasses(this.question.btnInit, this.question.usedMatchers)
         if (this.question.choices.indexOf('') === -1) {
             this.readyToSubmit = true
         }
@@ -141,7 +146,7 @@ export default {
     reset: function() {
         this.question.choices = Array(this.question.headers.length).fill("")
         this.question.usedMatchers = Array(this.question.matchers.length).fill(-1)
-        this.btnClasses = this.updateBtnClasses()
+        this.btnClasses = this.updateBtnClasses(this.question.btnInit, this.question.usedMatchers)
     },
     submit: function() {
         let difLength = this.question.matchers.length - this.question.headers.length
@@ -158,15 +163,14 @@ export default {
             this.question.choices.push(unmatch)
         }
         this.$emit("submitQuestion", this.question)
-        this.question = this.questionB
+        console.log("finished submit")
     },
-    updateBtnClasses: function() {
+    updateBtnClasses: function(btnInit, usedMatchers) {
         let arr = []
-        for (let n = 0; n < this.question.btnInit.length; n++) {
-            arr[n] = this.question.btnInit[n].slice()
+        for (let n = 0; n < btnInit.length; n++) {
+            arr[n] = btnInit[n].slice()
         }
-        //console.log("before update", arr[0][0])
-        let usedMatchers = this.question.usedMatchers
+        console.log("before update")
         //
         for (let m = 0; m < usedMatchers.length; m++) {
             if (usedMatchers[m] >= 0) {
@@ -179,7 +183,7 @@ export default {
                 Vue.set(arr[m], usedMatchers[m], "btn-success")
             }
         }
-        //console.log("updated", arr)
+        console.log("updated", arr)
         return arr
     }
   },

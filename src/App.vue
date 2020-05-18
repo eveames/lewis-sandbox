@@ -33,7 +33,7 @@ export default {
     return {
       bboxes: [1],
       elements: LewisElements,
-      whichApp: 1
+      whichApp: 2
     }
   },
   mounted () {
@@ -50,9 +50,9 @@ export default {
         height = rect.height;
         boxArray[key] = {width: width, height: height}
       })
-      console.log("done mounting App, boxArray is ", boxArray)
+      //console.log("done mounting App, boxArray is ", boxArray)
       this.bboxes = boxArray
-      console.log(this.bboxes)
+      //console.log(this.bboxes)
   },
   methods: {
     setApp: function(choice) {

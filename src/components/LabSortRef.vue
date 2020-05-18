@@ -6,7 +6,7 @@
                   type="button">{{msg}}</button>
         </div>
         <div class="card-body" v-if="msg==='Hide'">
-            <table v-for="item in refList" :key="index" >
+            <table v-for="(item, index) in refList" :key="index" >
                 <tr >
                     <th v-for="(header, index) in item[0]" :key="header"> 
                         {{header}}<br>

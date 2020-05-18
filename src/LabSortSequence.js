@@ -11,6 +11,8 @@
 export const LabSortSequence = [
     [
         [0, 1, ["C","Cu","Ca"], 2,],
-        [0, 2, ["Cl","Cr","Cs"], 1,["C","Ca"]]
+        [0, 2, ["Cl","Cr","Cs"], 1,["C","Ca"]],
+        [0, 0, ["Ag", "Au", "Hg"], 1,],
+        [0, 1, ["Mn", "Mg", "Na", "K"], 0,]
     ]
 ]

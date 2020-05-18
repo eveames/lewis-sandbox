@@ -43,7 +43,7 @@ export const LabSortCompounds = {
         Br: ['Br', 'bromine', 'red-brown liquid with red vapor above it'],
         Rb: ['Rb', 'rubidium','soft metal stored in oil'],
         Sr: ['Sr', 'strontium', 'silver metal with slight tinge of gold stored in oil'],
-        Ag: ['Ag', 'siler', 'shiny white metal'],
+        Ag: ['Ag', 'silver', 'shiny white metal'],
         Sn: ['Sn', 'tin', 'soft silver metal with slight tinge of gold'],
         Sb: ['Sb','antimony', 'shiny silver solid'],
         Te: ['Te','tellurium', 'brittle silver solid'],
