@@ -6,7 +6,7 @@
                   type="button">{{msg}}</button>
         </div>
         <div class="card-body" v-if="msg==='Hide'">
-            <table v-for="(item, index) in refList" :key="index" >
+            <table v-for="(item, index) in refList" :key="index" @click="reviewChoice(index)" class="btn" v-bind:class="{active: isActive === index}">
                 <tr >
                     <th v-for="(header, index) in item[0]" :key="header"> 
                         {{header}}<br>
@@ -27,7 +27,9 @@ table {
 th {
     padding: 5px;
 }
-
+.active {
+    border: solid red;
+}
 
 </style>
 
@@ -35,17 +37,30 @@ th {
 export default {
   name: 'LabSortRef',
   props: [
-      'refList'
+      'refList',
+      'revActive'
   ],
   data: function() {
       return {
-        msg: "Hide"
+        msg: "Hide",
+        activeIndex: 0
+      }
+  },
+  computed: {
+      isActive: function() {
+          if (this.revActive === true) {
+              return this.activeIndex
+          }
+          else return false
       }
   },
   methods: {
       toggleShow: function() {
           if (this.msg === "Show") this.msg = "Hide"
           else this.msg = "Show"
+      },
+      reviewChoice: function(index) {
+          this.$emit("reviewChoice", index)
       }
   }
 }

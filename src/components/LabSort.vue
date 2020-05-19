@@ -3,8 +3,11 @@
       <h4>Lab Sort Demo</h4>
       <div>You are trying to organize a chemical lab that got terribly jumbled! The bottles and jars and gas cylinders have become separated from part or all of their label, and you need to decide which of the loose label pieces and containers go together.</div>
         <div class="row">
-            <LabSortMatch class="col-7" :index='index' :level='level' v-on:submitQuestion='updateRefList'/>  
-            <LabSortRef class="col-5" :refList='refList'/>
+            <div class="col-7">
+                <LabSortMatch :index='revIndex' :level='revLevel' :isRev="true" v-if="showRev" v-on:submitQuestion="updateRefListRev"/>
+                <LabSortMatch  :index='index' :level='level' :isRev="false" v-on:submitQuestion='updateRefList'/>  
+            </div>
+            <LabSortRef class="col-5" :refList='refList' :revActive='showRev' v-on:reviewChoice='showRevComponent'/>
         </div>
     </div>
 </template>
@@ -27,7 +30,7 @@ table {
 //import LabSortSequence from '../LabSortSequence.js'
 import LabSortMatch from './LabSortMatch.vue'
 import LabSortRef from './LabSortRef.vue'
-//import Vue from 'vue'
+import Vue from 'vue'
 
 
 export default {
@@ -39,6 +42,10 @@ export default {
     return {
       level: 0,
       index: 0,
+      revIndex: 0,
+      revLevel: 0,
+      showRev: false,
+      refListRevIndex: 0,
       refList: [] // stores answers, when move to new level push new empty array
     }
   },
@@ -47,7 +54,6 @@ export default {
     
   },
   methods: {
-
     updateRefList: function(question) {
       //need to make this system smarter
       // deal with inconsistencies?
@@ -56,6 +62,19 @@ export default {
       let answer = [question.headers,question.choices, this.level, this.index, question.correct]
       this.refList.push(answer)
       this.index++
+    },
+    updateRefListRev: function(question) {
+        if (question) {
+            let answer = [question.headers,question.choices, this.level, this.index, question.correct]
+            Vue.set(this.refList, this.refListRevIndex, answer)
+        }
+        this.showRev = false
+    },
+    showRevComponent: function(index) {
+        let item = this.refList[index]
+        this.revIndex = item[3]
+        this.revLevel = item[2]
+        this.showRev = true
     }
 
 

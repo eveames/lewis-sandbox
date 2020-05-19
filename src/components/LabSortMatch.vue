@@ -20,8 +20,14 @@
             <button @click="reset()" class="btn">
                 Reset
             </button>
-            <button v-show="readyToSubmit" @click="submit()" class="btn">
+            <button v-show="readyToSubmit && !(isRev)" @click="submit()" class="btn">
                 Next
+            </button>
+            <button v-show="isRev && readyToSubmit" @click="submit()" class="btn">
+                Update
+            </button>
+            <button v-show="isRev && !(readyToSubmit)" @click="cancel()" class="btn">
+                Cancel
             </button>
         </div>
     </div>
@@ -46,7 +52,8 @@ export default {
   },
   props: [
       'index',
-      'level' 
+      'level',
+      'isRev' 
       ],
   data: function() {
     return {
@@ -176,6 +183,9 @@ export default {
         this.question.correct = _.round(this.question.correct/this.question.headers.length, 2)
         this.$emit("submitQuestion", this.question)
         console.log("finished submit")
+    },
+    cancel: function() {
+        this.$emit("submitQuestion", false)
     },
     updateBtnClasses: function(btnInit, usedMatchers) {
         let arr = []
