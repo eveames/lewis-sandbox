@@ -53,7 +53,7 @@ export default {
       // deal with inconsistencies?
       // order usefully, including duplicates
       // assess mastery to time level progression
-      let answer = [question.headers,question.choices]
+      let answer = [question.headers,question.choices, this.level, this.index, question.correct]
       this.refList.push(answer)
       this.index++
     }

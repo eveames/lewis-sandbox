@@ -97,11 +97,13 @@ export default {
     // 4: additional distractor items as match possibilities: [keys]
       let headers = []
       let matchers = []
+      let answers = []
       let data = []
       for (let i = 0; i < seqItem[2].length; i++) {
           data = LabSortCompounds[seqItem[2][i]]
           headers.push(data[seqItem[1]])
           matchers.push(data[seqItem[3]])
+          answers.push(data[seqItem[3]])
       }
       if (seqItem[4]) {
          for (let i = 0; i < seqItem[4].length; i++) {
@@ -121,7 +123,9 @@ export default {
           matchers: matchers,
           choices: choices,
           usedMatchers: usedMatchers,
-          btnInit: btnInit
+          btnInit: btnInit,
+          answers: answers,
+          correct: 0
       }
     },
     makeChoice: function(m, h) {
@@ -149,6 +153,7 @@ export default {
         this.btnClasses = this.updateBtnClasses(this.question.btnInit, this.question.usedMatchers)
     },
     submit: function() {
+        // set up distractor items for reflist
         let difLength = this.question.matchers.length - this.question.headers.length
         if (difLength > 0) {
             this.question.headers.push("unmatched")
@@ -162,6 +167,13 @@ export default {
             }
             this.question.choices.push(unmatch)
         }
+        // check if correct
+        for (let i = 0; i < this.question.answers.length; i++) {
+            if (this.question.answers[i] === this.question.choices[i]) {
+                this.question.correct++
+            }
+        }
+        this.question.correct = _.round(this.question.correct/this.question.headers.length, 2)
         this.$emit("submitQuestion", this.question)
         console.log("finished submit")
     },
