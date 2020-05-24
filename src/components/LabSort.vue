@@ -3,11 +3,11 @@
       <h4>Lab Sort Demo</h4>
       <div>You are trying to organize a chemical lab that got terribly jumbled! The bottles and jars and gas cylinders have become separated from part or all of their label, and you need to decide which of the loose label pieces and containers go together.</div>
         <div class="row">
-            <div class="col-7">
+            <div class="col-6">
                 <LabSortMatch :index='revIndex' :level='revLevel' :isRev="true" v-if="showRev" v-on:submitQuestion="updateRefListRev"/>
                 <LabSortMatch  :index='index' :level='level' :isRev="false" v-on:submitQuestion='updateRefList'/>  
             </div>
-            <LabSortRef class="col-5" :refList='refList' :revActive='showRev' v-on:reviewChoice='showRevComponent'/>
+            <LabSortRef class="col-6" :refList='refList' :revActive='showRev' v-on:reviewChoice='showRevComponent'/>
         </div>
     </div>
 </template>
@@ -23,11 +23,6 @@ table {
 </style>
 
 <script>
-
-//import _ from 'lodash'
-//import {LewisHomo, LewisHetero, LewisMulti, LewisTriCentral, LewisIons, LewisElements} from '../LewisData.js'
-//import LabSortCompounds from '../LabSortData.js'
-//import LabSortSequence from '../LabSortSequence.js'
 import LabSortMatch from './LabSortMatch.vue'
 import LabSortRef from './LabSortRef.vue'
 import Vue from 'vue'
@@ -51,7 +46,6 @@ export default {
   },
   //props: ['questionTypeID'],
   computed: {
-    
   },
   methods: {
     updateRefList: function(question) {
@@ -59,13 +53,13 @@ export default {
       // deal with inconsistencies?
       // order usefully, including duplicates
       // assess mastery to time level progression
-      let answer = [question.headers,question.choices, this.level, this.index, question.correct]
+      let answer = [question.headers,question.choices, this.level, this.index, question.correct, question.matcherType]
       this.refList.push(answer)
       this.index++
     },
     updateRefListRev: function(question) {
         if (question) {
-            let answer = [question.headers,question.choices, this.level, this.index, question.correct]
+            let answer = [question.headers,question.choices, this.level, this.index, question.correct, question.matcherType]
             Vue.set(this.refList, this.refListRevIndex, answer)
         }
         this.showRev = false
@@ -76,8 +70,6 @@ export default {
         this.revLevel = item[2]
         this.showRev = true
     }
-
-
   },
 }
 </script>

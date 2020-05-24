@@ -4,6 +4,8 @@
               type="button">Lewis Structures!</button>
     <button @click="setApp(2)" class="btn btn-default"
               type="button">Lab Sort!</button>
+    <button @click="setApp(3)" class="btn btn-default"
+              type="button">LabIntro</button>
     <LewisTester v-if="whichApp === 1" v-bind:bboxes = "bboxes"/>
     <LabSort v-if="whichApp === 2" />
     <svg class="Lewis-Box-Sizes" width="20" height="20">
@@ -14,20 +16,21 @@
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
 import LewisTester from './components/LewisTester.vue'
-//import LewisAtom from './components/LewisAtom.vue'
 import _ from 'lodash'
 import {LewisElements} from './LewisData.js'
 
 import LabSort from './components/LabSort.vue'
+//import PassageTree from './components/PassageTree.vue'
+
 
 
 export default {
   name: 'app',
   components: {
     LewisTester,
-    LabSort
+    LabSort,
+    //PassageTree
   },
   data: function() {
     return {

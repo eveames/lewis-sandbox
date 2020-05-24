@@ -4,9 +4,8 @@
         <div class="card-body">
             <table class="">
                 <tr>
-                    <th v-for="(header, index) in question.headers" :key="header"> 
-                        {{header}}<br>
-                        {{question.choices[index]}}
+                    <th v-for="(header, index) in question.headers" :key="index"> 
+                        <LabSortLabel :header="header" :matcherType="question.matcherType" :choice="question.choices[index]"/>
                     </th>
                 </tr>
                 <tr v-for="m in question.matchers.length" :key="m">
@@ -42,13 +41,13 @@
 import _ from 'lodash'
 import {LabSortCompounds} from '../LabSortData.js'
 import {LabSortSequence} from '../LabSortSequence.js'
+import LabSortLabel from './LabSortLabel.vue'
 import Vue from 'vue'
 
 
 export default {
   components: { 
-    //LewisAtom,
-    //LewisAtomUpdate
+    LabSortLabel
   },
   props: [
       'index',
@@ -102,13 +101,19 @@ export default {
     // 2: [keys of items in data object to include in header]
     // 3: match data (which property we match to header) 
     // 4: additional distractor items as match possibilities: [keys]
+      
+      // headers: array of objects, each object has keys matching seqItem[1]
       let headers = []
       let matchers = []
       let answers = []
       let data = []
       for (let i = 0; i < seqItem[2].length; i++) {
+          let header = {0: false, 1: false, 2: false, 3: false, 4: false, 5: false, 6: false}
           data = LabSortCompounds[seqItem[2][i]]
-          headers.push(data[seqItem[1]])
+          for (let k = 0; k < seqItem[1].length; k++) {
+              Vue.set(header, seqItem[1][k], data[seqItem[1][k]])
+          }
+          headers.push(header)
           matchers.push(data[seqItem[3]])
           answers.push(data[seqItem[3]])
       }
@@ -128,6 +133,7 @@ export default {
       this.question = {
           headers: headers,
           matchers: matchers,
+          matcherType: seqItem[3],
           choices: choices,
           usedMatchers: usedMatchers,
           btnInit: btnInit,
@@ -163,7 +169,7 @@ export default {
         // set up distractor items for reflist
         let difLength = this.question.matchers.length - this.question.headers.length
         if (difLength > 0) {
-            this.question.headers.push("unmatched")
+            this.question.headers.push(["unmatched"])
             let index = 0
             let unmatch = ''
             for (let i = 0; i < difLength; i++) {

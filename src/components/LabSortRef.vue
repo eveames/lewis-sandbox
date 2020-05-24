@@ -8,9 +8,8 @@
         <div class="card-body" v-if="msg==='Hide'">
             <table v-for="(item, index) in refList" :key="index" @click="reviewChoice(index)" class="btn" v-bind:class="{active: isActive === index}">
                 <tr >
-                    <th v-for="(header, index) in item[0]" :key="header"> 
-                        {{header}}<br>
-                        {{item[1][index]}}
+                    <th v-for="(header, index) in item[0]" :key="index">
+                        <LabSortLabel :header="header" :matcherType="item[5]" :choice="item[1][index]"/> 
                     </th>
                 </tr>
             </table>
@@ -34,8 +33,13 @@ th {
 </style>
 
 <script>
+import LabSortLabel from './LabSortLabel.vue'
+
 export default {
   name: 'LabSortRef',
+  components: {
+      LabSortLabel
+  },
   props: [
       'refList',
       'revActive'
